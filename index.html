@@ -1,0 +1,748 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goodland Corporation | Palm Oil Farm</title>
+
+<style>
+:root {
+  --green:#174d2b;
+  --dark:#10351f;
+  --lime:#8fbd42;
+  --gold:#f3bd43;
+  --cream:#f6f8ef;
+  --red:#bd3636;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--cream);color:#183124}
+header{background:linear-gradient(120deg,#103b22,#32743e);color:white;padding:22px 6%;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:bold}
+.logo span{color:var(--gold)}
+header small{display:block;margin-top:5px}
+nav{background:var(--dark);padding:12px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+button{border:0;cursor:pointer;border-radius:7px;padding:11px 15px;font-weight:bold;transition:.2s}
+button:hover{transform:translateY(-2px);filter:brightness(.95)}
+nav button{background:white;color:var(--green)}
+.primary{background:var(--green);color:white}
+.gold{background:var(--gold);color:#24351f}
+.danger{background:var(--red);color:white}
+.secondary{background:#e3eadb;color:var(--green)}
+main{max-width:1150px;margin:auto;padding:25px 16px 50px}
+.page{display:none;animation:fade .3s}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{min-height:420px;border-radius:18px;padding:45px 25px;color:white;display:flex;align-items:center;background:linear-gradient(90deg,rgba(8,39,20,.91),rgba(8,39,20,.35)),url("https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1600&q=80") center/cover}
+.hero-content{max-width:680px}
+.hero h1{font-size:clamp(35px,6vw,62px);margin:12px 0}
+.hero p{font-size:18px;line-height:1.8}
+.eyebrow{color:var(--gold);font-weight:bold;letter-spacing:3px}
+h2,h3{color:var(--green)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:white;padding:22px;border-radius:13px;box-shadow:0 5px 20px #153c2010;border:1px solid #e4eadf;margin-bottom:16px}
+.card h3{margin-top:5px}
+.card p{line-height:1.6}
+.big-icon{font-size:35px}
+.notice{padding:15px;border-left:5px solid var(--lime);background:#edf5e6;border-radius:7px;line-height:1.6;margin:15px 0}
+.warning{padding:14px;background:#fff4d6;border-radius:7px;line-height:1.6}
+label{display:block;font-weight:bold;margin:12px 0 6px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #cbd7c7;border-radius:7px;font:inherit;background:white}
+textarea{resize:vertical;min-height:130px}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stat{padding:20px;border-radius:12px;background:#e8f1e1}
+.stat strong{display:block;font-size:25px;margin-top:8px;overflow-wrap:anywhere}
+.list-item{padding:14px 0;border-bottom:1px solid #e4eadf;overflow-wrap:anywhere}
+.list-item p{white-space:pre-wrap}
+.empty{color:#758373;padding:15px 0}
+table{border-collapse:collapse;width:100%;margin-top:15px}
+th,td{padding:11px;border-bottom:1px solid #ddd;text-align:left}
+th{background:#e8f1e1}
+.table-wrap{overflow-x:auto}
+canvas{display:block;width:100%;height:350px;border:2px solid #cbd7c7;border-radius:8px;background:white;touch-action:none}
+footer{text-align:center;background:var(--dark);color:white;padding:25px 15px;line-height:1.8}
+.hidden{display:none!important}
+.small{font-size:13px;color:#657565}
+#toast{position:fixed;bottom:20px;right:20px;background:var(--green);color:white;padding:13px 20px;border-radius:8px;display:none;z-index:10;max-width:90%}
+
+/* Calculator */
+.calculator{max-width:420px;margin:20px auto;background:#142b1d;padding:20px;border-radius:18px;box-shadow:0 10px 30px #0002}
+.calculator h3{color:white;text-align:center}
+#calcDisplay{background:#f3f7ef;color:#173b24;text-align:right;font-size:32px;min-height:65px;margin-bottom:14px;border-radius:8px;padding:14px;overflow-wrap:anywhere}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.calc-grid button{font-size:20px;min-height:55px;background:#e5eadf;color:#153e24}
+.calc-grid button.op{background:#f3bd43}
+.calc-grid button.equal{background:#78b94b;color:white}
+.calc-grid button.clear{background:#bd3636;color:white}
+.calc-grid button.zero{grid-column:span 2}
+@media(max-width:600px){
+ header{padding:18px}.hero{padding:25px 18px}
+ main{padding-left:12px;padding-right:12px}
+ nav button{flex:1 1 40%}
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">🌴 GOODLAND <span>CORPORATION</span>
+    <small>Palm Oil Farm & Agricultural Development</small>
+  </div>
+  <div id="headerStatus">Growing Today, Sustaining Tomorrow</div>
+</header>
+
+<nav id="navigation" class="hidden">
+  <button onclick="showPage('hub')">🏠 Hub</button>
+  <button onclick="openWorkspace('owner')">Owner</button>
+  <button onclick="openWorkspace('daniel')">Mrs Daniel</button>
+  <button onclick="openWorkspace('solomon')">Mrs Solomon</button>
+  <button onclick="openWorkspace('copratore')">Copratore</button>
+  <button onclick="showPage('cheeck')">Cheeck</button>
+  <button onclick="showPage('market')">Market</button>
+  <button onclick="showPage('farm')">Farm</button>
+  <button onclick="showPage('reports')">Reports</button>
+  <button onclick="showPage('calculator')">Calculator</button>
+  <button onclick="logout()" class="gold">Lock Hub</button>
+</nav>
+
+<main>
+
+<!-- PAGE 1: WELCOME -->
+<section id="welcome" class="page active">
+  <div class="hero">
+    <div class="hero-content">
+      <div class="eyebrow">WELCOME TO GOODLAND</div>
+      <h1>Growing Palm Oil. Growing Opportunity.</h1>
+      <p>Goodland Corporation is dedicated to palm oil farming, agricultural development, responsible production and creating opportunities for our community.</p>
+      <p>Palm oil is used in cooking, food manufacturing, soap, cosmetics and many everyday products. Responsible farming can support food production, jobs and local economic development.</p>
+      <button class="gold" onclick="showPage('login')">Enter Goodland Hub →</button>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:25px">
+    <div class="card"><div class="big-icon">🌱</div><h3>Responsible Farming</h3><p>Encouraging sustainable farming and careful land management.</p></div>
+    <div class="card"><div class="big-icon">🛢️</div><h3>Palm Oil Production</h3><p>Supporting production and distribution of palm oil products.</p></div>
+    <div class="card"><div class="big-icon">🤝</div><h3>Community Development</h3><p>Creating opportunities for farmers, workers and buyers.</p></div>
+  </div>
+</section>
+
+<!-- PAGE 2: LOGIN -->
+<section id="login" class="page">
+  <div class="card" style="max-width:520px;margin:35px auto">
+    <div class="big-icon">🔐</div><h2>Goodland Hub Access</h2>
+    <p>Enter the Hub passkey to continue.</p>
+    <form onsubmit="event.preventDefault();login()">
+      <label for="hubKey">Hub Passkey</label>
+      <input id="hubKey" type="password" required placeholder="Enter Hub passkey">
+      <div class="actions"><button class="primary" type="submit">Unlock Hub</button><button class="secondary" type="button" onclick="showPage('welcome')">Back</button></div>
+    </form>
+    <p id="loginError" style="color:#bd3636"></p>
+    <div class="warning">Demonstration only: browser-based passkeys are not secure authentication for confidential company records.</div>
+  </div>
+</section>
+
+<!-- PAGE 3: HUB -->
+<section id="hub" class="page">
+  <h2>🌿 Goodland Hub</h2>
+  <p>Select a workspace or company tool.</p>
+  <div class="grid">
+    <div class="card"><div class="big-icon">👑</div><h3>Owner Workspace</h3><p>Messages, notes, money records and drawings.</p><button class="primary" onclick="openWorkspace('owner')">Open Workspace</button></div>
+    <div class="card"><div class="big-icon">📝</div><h3>Mrs Daniel Workspace</h3><p>Save notes, send messages and keep records.</p><button class="primary" onclick="openWorkspace('daniel')">Open Workspace</button></div>
+    <div class="card"><div class="big-icon">📒</div><h3>Mrs Solomon Workspace</h3><p>Writing, financial records and drawings.</p><button class="primary" onclick="openWorkspace('solomon')">Open Workspace</button></div>
+    <div class="card"><div class="big-icon">🌾</div><h3>Copratore Workspace</h3><p>Record activities and communicate with Cheeck.</p><button class="primary" onclick="openWorkspace('copratore')">Open Workspace</button></div>
+    <div class="card"><div class="big-icon">✉️</div><h3>Cheeck Message Centre</h3><p>Read saved workspace messages.</p><button class="primary" onclick="showPage('cheeck')">Open Messages</button></div>
+    <div class="card"><div class="big-icon">🛒</div><h3>Market</h3><p>Record buyer names and phone numbers.</p><button class="primary" onclick="showPage('market')">Open Market</button></div>
+    <div class="card"><div class="big-icon">🌴</div><h3>Farm Operations</h3><p>Keep a record of farm activities.</p><button class="primary" onclick="showPage('farm')">Open Farm</button></div>
+    <div class="card"><div class="big-icon">📊</div><h3>Reports</h3><p>Review money received, spent and balance.</p><button class="primary" onclick="showPage('reports')">View Reports</button></div>
+    <div class="card"><div class="big-icon">🧮</div><h3>Calculator</h3><p>Calculate sums, differences, products and more.</p><button class="primary" onclick="showPage('calculator')">Open Calculator</button></div>
+  </div>
+</section>
+
+<!-- WORKSPACE TEMPLATE CONTENT -->
+<section id="owner" class="page workspace" data-workspace="owner">
+  <h2>👑 Owner Workspace</h2>
+  <div class="notice">Keep company notes, messages, financial records and drawings here.</div>
+  <div class="card"><h3>✉️ Special Message to Cheeck</h3><textarea id="msg-owner" placeholder="Write a message for Cheeck..."></textarea><div class="actions"><button class="primary" onclick="sendMessage('owner')">Save Message for Cheeck</button><button class="secondary" onclick="clearMessage('owner')">Clear Box</button></div></div>
+  <div class="card"><h3>📝 General Writing Area</h3><textarea id="notes-owner" placeholder="Write company notes or plans..."></textarea><div class="actions"><button class="primary" onclick="saveNotes('owner')">Save Writing</button><button class="secondary" onclick="loadNotes('owner')">Reload Saved Writing</button></div></div>
+  <div class="card"><h3>💰 Money Received and Spent</h3><div class="form-row"><div><label>Transaction Type</label><select id="type-owner"><option value="income">Money Received</option><option value="expense">Money Spent</option></select></div><div><label>Amount (₦)</label><input id="amount-owner" type="number" min="0.01" step="0.01"></div></div><label>Description</label><input id="desc-owner" placeholder="Palm oil sales, transport, etc."><div class="actions"><button class="primary" onclick="addMoney('owner')">Save Transaction</button></div><div id="money-owner"></div></div>
+  <div class="card"><h3>🎨 Drawing Board</h3><label>Pen Colour</label><input id="color-owner" type="color" value="#174d2b"><canvas id="canvas-owner" width="1000" height="450"></canvas><div class="actions"><button class="primary" onclick="saveDrawing('owner')">Save Drawing</button><button class="secondary" onclick="loadDrawing('owner')">Reload Drawing</button><button class="danger" onclick="clearDrawing('owner')">Clear Board</button></div></div>
+</section>
+
+<section id="daniel" class="page workspace" data-workspace="daniel">
+  <h2>📝 Mrs Daniel Workspace</h2>
+  <div class="card"><h3>✉️ Special Message to Cheeck</h3><textarea id="msg-daniel" placeholder="Write a message for Cheeck..."></textarea><div class="actions"><button class="primary" onclick="sendMessage('daniel')">Save Message for Cheeck</button><button class="secondary" onclick="clearMessage('daniel')">Clear Box</button></div></div>
+  <div class="card"><h3>📝 General Writing Area</h3><textarea id="notes-daniel" placeholder="Write your notes..."></textarea><div class="actions"><button class="primary" onclick="saveNotes('daniel')">Save Writing</button><button class="secondary" onclick="loadNotes('daniel')">Reload Saved Writing</button></div></div>
+  <div class="card"><h3>💰 Money Received and Spent</h3><div class="form-row"><div><label>Transaction Type</label><select id="type-daniel"><option value="income">Money Received</option><option value="expense">Money Spent</option></select></div><div><label>Amount (₦)</label><input id="amount-daniel" type="number" min="0.01" step="0.01"></div></div><label>Description</label><input id="desc-daniel" placeholder="Transaction details"><div class="actions"><button class="primary" onclick="addMoney('daniel')">Save Transaction</button></div><div id="money-daniel"></div></div>
+  <div class="card"><h3>🎨 Drawing Board</h3><label>Pen Colour</label><input id="color-daniel" type="color" value="#174d2b"><canvas id="canvas-daniel" width="1000" height="450"></canvas><div class="actions"><button class="primary" onclick="saveDrawing('daniel')">Save Drawing</button><button class="secondary" onclick="loadDrawing('daniel')">Reload Drawing</button><button class="danger" onclick="clearDrawing('daniel')">Clear Board</button></div></div>
+</section>
+
+<section id="solomon" class="page workspace" data-workspace="solomon">
+  <h2>📒 Mrs Solomon Workspace</h2>
+  <div class="card"><h3>✉️ Special Message to Cheeck</h3><textarea id="msg-solomon" placeholder="Write a message for Cheeck..."></textarea><div class="actions"><button class="primary" onclick="sendMessage('solomon')">Save Message for Cheeck</button><button class="secondary" onclick="clearMessage('solomon')">Clear Box</button></div></div>
+  <div class="card"><h3>📝 General Writing Area</h3><textarea id="notes-solomon" placeholder="Write your notes..."></textarea><div class="actions"><button class="primary" onclick="saveNotes('solomon')">Save Writing</button><button class="secondary" onclick="loadNotes('solomon')">Reload Saved Writing</button></div></div>
+  <div class="card"><h3>💰 Money Received and Spent</h3><div class="form-row"><div><label>Transaction Type</label><select id="type-solomon"><option value="income">Money Received</option><option value="expense">Money Spent</option></select></div><div><label>Amount (₦)</label><input id="amount-solomon" type="number" min="0.01" step="0.01"></div></div><label>Description</label><input id="desc-solomon" placeholder="Transaction details"><div class="actions"><button class="primary" onclick="addMoney('solomon')">Save Transaction</button></div><div id="money-solomon"></div></div>
+  <div class="card"><h3>🎨 Drawing Board</h3><label>Pen Colour</label><input id="color-solomon" type="color" value="#174d2b"><canvas id="canvas-solomon" width="1000" height="450"></canvas><div class="actions"><button class="primary" onclick="saveDrawing('solomon')">Save Drawing</button><button class="secondary" onclick="loadDrawing('solomon')">Reload Drawing</button><button class="danger" onclick="clearDrawing('solomon')">Clear Board</button></div></div>
+</section>
+
+<section id="copratore" class="page workspace" data-workspace="copratore">
+  <h2>🌾 Copratore Workspace</h2>
+  <div class="card"><h3>✉️ Special Message to Cheeck</h3><textarea id="msg-copratore" placeholder="Write a message for Cheeck..."></textarea><div class="actions"><button class="primary" onclick="sendMessage('copratore')">Save Message for Cheeck</button><button class="secondary" onclick="clearMessage('copratore')">Clear Box</button></div></div>
+  <div class="card"><h3>📝 General Writing Area</h3><textarea id="notes-copratore" placeholder="Write your notes..."></textarea><div class="actions"><button class="primary" onclick="saveNotes('copratore')">Save Writing</button><button class="secondary" onclick="loadNotes('copratore')">Reload Saved Writing</button></div></div>
+  <div class="card"><h3>💰 Money Received and Spent</h3><div class="form-row"><div><label>Transaction Type</label><select id="type-copratore"><option value="income">Money Received</option><option value="expense">Money Spent</option></select></div><div><label>Amount (₦)</label><input id="amount-copratore" type="number" min="0.01" step="0.01"></div></div><label>Description</label><input id="desc-copratore" placeholder="Transaction details"><div class="actions"><button class="primary" onclick="addMoney('copratore')">Save Transaction</button></div><div id="money-copratore"></div></div>
+  <div class="card"><h3>🎨 Drawing Board</h3><label>Pen Colour</label><input id="color-copratore" type="color" value="#174d2b"><canvas id="canvas-copratore" width="1000" height="450"></canvas><div class="actions"><button class="primary" onclick="saveDrawing('copratore')">Save Drawing</button><button class="secondary" onclick="loadDrawing('copratore')">Reload Drawing</button><button class="danger" onclick="clearDrawing('copratore')">Clear Board</button></div></div>
+</section>
+
+<!-- CHEECK MESSAGES -->
+<section id="cheeck" class="page">
+  <h2>✉️ Cheeck Message Centre</h2>
+  <p>Messages saved by Owner, Mrs Daniel, Mrs Solomon and Copratore appear here.</p>
+  <button class="primary" onclick="renderMessages()">Refresh Messages</button>
+  <div id="messageList" class="card" style="margin-top:15px"></div>
+</section>
+
+<!-- MARKET -->
+<section id="market" class="page">
+  <h2>🛒 Goodland Market</h2>
+  <div class="card"><h3>Register a Buyer</h3>
+    <form onsubmit="event.preventDefault();addBuyer()">
+      <label>Buyer Full Name</label><input id="buyerName" required placeholder="Buyer's name">
+      <label>Phone Number</label><input id="buyerPhone" type="tel" required placeholder="Buyer's phone number">
+      <label>Product</label><input id="buyerProduct" placeholder="Palm oil, palm kernels, etc.">
+      <label>Notes</label><textarea id="buyerNotes" style="min-height:75px"></textarea>
+      <button class="primary" type="submit">Save Buyer</button>
+    </form>
+  </div>
+  <div class="card"><h3>Buyer Records</h3><label>Search Buyers</label><input id="buyerSearch" oninput="renderBuyers()" placeholder="Search name, phone or product"><div id="buyerList"></div><div class="actions"><button class="secondary" onclick="exportBuyers()">Export Buyers CSV</button></div></div>
+  <p class="small">Keep customer details private and only record information with permission.</p>
+</section>
+
+<!-- FARM -->
+<section id="farm" class="page">
+  <h2>🌴 Farm Operations</h2>
+  <div class="card"><h3>Farm Activity Journal</h3><label>Date</label><input id="farmDate" type="date"><label>Activity Title</label><input id="farmTitle" placeholder="e.g. Seedling inspection"><label>Activity Details</label><textarea id="farmDetails" placeholder="Describe farm work and progress..."></textarea><button class="primary" onclick="addFarmLog()">Save Farm Activity</button></div>
+  <div class="card"><h3>Saved Activities</h3><div id="farmList"></div></div>
+</section>
+
+<!-- REPORTS -->
+<section id="reports" class="page">
+  <h2>📊 Goodland Financial Reports</h2>
+  <div class="grid">
+    <div class="stat">Money Received<strong id="totalIncome">₦0.00</strong></div>
+    <div class="stat">Money Spent<strong id="totalExpense">₦0.00</strong></div>
+    <div class="stat">Balance<strong id="totalBalance">₦0.00</strong></div>
+  </div>
+  <div class="card"><h3>All Transactions</h3><div id="allMoney"></div><div class="actions"><button class="secondary" onclick="exportMoney()">Export Transactions CSV</button><button class="secondary" onclick="renderReports()">Refresh Reports</button></div></div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calculator" class="page">
+  <h2>🧮 Goodland Calculator</h2>
+  <p>Use the calculator for everyday arithmetic and farm or market calculations.</p>
+  <div class="calculator">
+    <h3>GOODLAND CALCULATOR</h3>
+    <div id="calcDisplay" aria-live="polite">0</div>
+    <div class="calc-grid">
+      <button class="clear" onclick="calcClear()">AC</button>
+      <button onclick="calcDelete()">DEL</button>
+      <button class="op" onclick="calcInput('%')">%</button>
+      <button class="op" onclick="calcInput('/')">÷</button>
+
+      <button onclick="calcInput('7')">7</button>
+      <button onclick="calcInput('8')">8</button>
+      <button onclick="calcInput('9')">9</button>
+      <button class="op" onclick="calcInput('*')">×</button>
+
+      <button onclick="calcInput('4')">4</button>
+      <button onclick="calcInput('5')">5</button>
+      <button onclick="calcInput('6')">6</button>
+      <button class="op" onclick="calcInput('-')">−</button>
+
+      <button onclick="calcInput('1')">1</button>
+      <button onclick="calcInput('2')">2</button>
+      <button onclick="calcInput('3')">3</button>
+      <button class="op" onclick="calcInput('+')">+</button>
+
+      <button class="zero" onclick="calcInput('0')">0</button>
+      <button onclick="calcInput('.')">.</button>
+      <button class="equal" onclick="calcResult()">=</button>
+    </div>
+    <p style="color:#fff;font-size:12px">Use AC to start again. DEL removes the last character.</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <strong>GOODLAND CORPORATION</strong><br>
+  Palm Oil Farming • Agriculture • Community Development<br>
+  Growing Today, Sustaining Tomorrow.
+</footer>
+<div id="toast" role="status"></div>
+
+<script>
+// DEMONSTRATION PASSKEYS
+// This is not secure server-side authentication.
+const HUB_PASSKEY = "GOODLAND HUB123456789";
+
+const WORKSPACE_PASSKEYS = {
+  daniel: "DANIEL123456789",
+  solomon: "SOLOMON123456789",
+  copratore: "COPRATORE123456789"
+};
+
+const WORKSPACES = ["owner","daniel","solomon","copratore"];
+const NAMES = {
+  owner:"Owner",
+  daniel:"Mrs Daniel",
+  solomon:"Mrs Solomon",
+  copratore:"Copratore"
+};
+let hubUnlocked = false;
+
+// Safe browser storage helpers
+function storageGet(key, fallback) {
+  try {
+    const value = localStorage.getItem("goodland_" + key);
+    return value === null ? fallback : JSON.parse(value);
+  } catch (e) { return fallback; }
+}
+function storageSet(key, value) {
+  try {
+    localStorage.setItem("goodland_" + key, JSON.stringify(value));
+    return true;
+  } catch (e) {
+    alert("Unable to save. Browser storage may be full.");
+    return false;
+  }
+}
+function notify(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.display = "block";
+  clearTimeout(notify.timer);
+  notify.timer = setTimeout(() => toast.style.display = "none", 2500);
+}
+
+// Navigation and access
+function showPage(id) {
+  if (id !== "welcome" && id !== "login" && !hubUnlocked) id = "login";
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  if (id === "cheeck") renderMessages();
+  if (id === "market") renderBuyers();
+  if (id === "farm") renderFarmLogs();
+  if (id === "reports") renderReports();
+
+  if (WORKSPACES.includes(id)) {
+    loadNotes(id);
+    renderMoney(id);
+    loadDrawing(id);
+  }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function login() {
+  if (document.getElementById("hubKey").value === HUB_PASSKEY) {
+    hubUnlocked = true;
+    document.getElementById("navigation").classList.remove("hidden");
+    document.getElementById("headerStatus").textContent = "Goodland Hub is open";
+    document.getElementById("loginError").textContent = "";
+    document.getElementById("hubKey").value = "";
+    showPage("hub");
+  } else {
+    document.getElementById("loginError").textContent = "Incorrect Hub passkey. Try again.";
+  }
+}
+function openWorkspace(who) {
+  if (!hubUnlocked) { showPage("login"); return; }
+
+  if (who === "owner") {
+    showPage("owner");
+    return;
+  }
+
+  const entered = prompt("Enter the passkey for " + NAMES[who] + " Workspace:");
+  if (entered === null) return;
+
+  if (entered === WORKSPACE_PASSKEYS[who]) {
+    showPage(who);
+    notify(NAMES[who] + " Workspace unlocked.");
+  } else {
+    alert("Incorrect passkey. Access denied.");
+  }
+}
+function logout() {
+  hubUnlocked = false;
+  document.getElementById("navigation").classList.add("hidden");
+  document.getElementById("headerStatus").textContent = "Growing Today, Sustaining Tomorrow";
+  showPage("login");
+}
+
+// General writing
+function saveNotes(who) {
+  if (storageSet("notes_" + who, document.getElementById("notes-" + who).value)) notify("Writing saved.");
+}
+function loadNotes(who) {
+  document.getElementById("notes-" + who).value = storageGet("notes_" + who, "");
+}
+function clearMessage(who) {
+  document.getElementById("msg-" + who).value = "";
+}
+
+// Messages to Cheeck
+function sendMessage(who) {
+  const text = document.getElementById("msg-" + who).value.trim();
+  if (!text) return alert("Write a message first.");
+  const messages = storageGet("messages", []);
+  messages.unshift({id:Date.now()+Math.random(),from:NAMES[who],text,date:new Date().toLocaleString()});
+  if (storageSet("messages", messages)) {
+    document.getElementById("msg-" + who).value = "";
+    notify("Message saved for Cheeck.");
+  }
+}
+function renderMessages() {
+  const box = document.getElementById("messageList");
+  box.replaceChildren();
+  const messages = storageGet("messages", []);
+  if (!messages.length) {
+    box.textContent = "No messages yet.";
+    return;
+  }
+  messages.forEach(m => {
+    const item = document.createElement("div");
+    item.className = "list-item";
+    const title = document.createElement("strong");
+    title.textContent = m.from + " — ";
+    const date = document.createElement("small");
+    date.textContent = m.date;
+    const content = document.createElement("p");
+    content.textContent = m.text;
+    item.append(title,date,content);
+    box.appendChild(item);
+  });
+}
+
+// Money records
+function addMoney(who) {
+  const type = document.getElementById("type-" + who).value;
+  const amount = Number(document.getElementById("amount-" + who).value);
+  const description = document.getElementById("desc-" + who).value.trim();
+  if (!Number.isFinite(amount) || amount <= 0) return alert("Enter an amount greater than zero.");
+  if (!description) return alert("Enter a description.");
+
+  const entries = storageGet("money_" + who, []);
+  entries.unshift({id:Date.now()+Math.random(),type,amount,description,date:new Date().toLocaleString()});
+  if (storageSet("money_" + who, entries)) {
+    document.getElementById("amount-" + who).value = "";
+    document.getElementById("desc-" + who).value = "";
+    renderMoney(who);
+    renderReports();
+    notify("Transaction saved.");
+  }
+}
+function naira(value) {
+  return "₦" + Number(value).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function renderMoney(who) {
+  const entries = storageGet("money_" + who, []);
+  const income = entries.filter(x => x.type === "income").reduce((s,x) => s+x.amount,0);
+  const expense = entries.filter(x => x.type === "expense").reduce((s,x) => s+x.amount,0);
+  const box = document.getElementById("money-" + who);
+  box.replaceChildren();
+
+  const summary = document.createElement("div");
+  summary.className = "notice";
+  summary.textContent = "Received: " + naira(income) + " | Spent: " + naira(expense) + " | Balance: " + naira(income-expense);
+  box.appendChild(summary);
+
+  if (!entries.length) {
+    const empty = document.createElement("p");
+    empty.className = "empty";
+    empty.textContent = "No transactions saved yet.";
+    box.appendChild(empty);
+  }
+
+  entries.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    const title = document.createElement("strong");
+    title.textContent = (entry.type === "income" ? "Received: " : "Spent: ") + naira(entry.amount);
+    const details = document.createElement("p");
+    details.textContent = entry.description;
+    const date = document.createElement("small");
+    date.textContent = entry.date;
+    const del = document.createElement("button");
+    del.className = "danger";
+    del.textContent = "Delete";
+    del.style.marginTop = "8px";
+    del.onclick = () => {
+      if (!confirm("Delete this transaction?")) return;
+      storageSet("money_" + who, storageGet("money_" + who, []).filter(x => x.id !== entry.id));
+      renderMoney(who);
+      renderReports();
+    };
+    row.append(title,details,date,document.createElement("br"),del);
+    box.appendChild(row);
+  });
+}
+function renderReports() {
+  let all = [];
+  WORKSPACES.forEach(who => storageGet("money_" + who, []).forEach(entry => all.push({...entry,workspace:NAMES[who]})));
+  const income = all.filter(x => x.type === "income").reduce((s,x) => s+x.amount,0);
+  const expense = all.filter(x => x.type === "expense").reduce((s,x) => s+x.amount,0);
+  document.getElementById("totalIncome").textContent = naira(income);
+  document.getElementById("totalExpense").textContent = naira(expense);
+  document.getElementById("totalBalance").textContent = naira(income-expense);
+
+  const box = document.getElementById("allMoney");
+  box.replaceChildren();
+  if (!all.length) {
+    box.textContent = "No financial records have been saved.";
+    return;
+  }
+  const wrap = document.createElement("div");
+  wrap.className = "table-wrap";
+  const table = document.createElement("table");
+  const thead = document.createElement("thead");
+  const hr = document.createElement("tr");
+  ["Workspace","Type","Description","Amount","Date"].forEach(t => {
+    const th = document.createElement("th");
+    th.textContent = t;
+    hr.appendChild(th);
+  });
+  thead.appendChild(hr);
+  table.appendChild(thead);
+  const tbody = document.createElement("tbody");
+  all.forEach(entry => {
+    const tr = document.createElement("tr");
+    [entry.workspace,entry.type === "income" ? "Received" : "Spent",entry.description,naira(entry.amount),entry.date].forEach(v => {
+      const td = document.createElement("td");
+      td.textContent = v;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  box.appendChild(wrap);
+}
+function downloadCSV(filename, rows) {
+  const csv = rows.map(row => row.map(v => '"' + String(v ?? "").replace(/"/g,'""') + '"').join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF" + csv],{type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+function exportMoney() {
+  const rows = [["Workspace","Type","Description","Amount","Date"]];
+  WORKSPACES.forEach(who => storageGet("money_" + who, []).forEach(x => rows.push([NAMES[who],x.type,x.description,x.amount,x.date])));
+  downloadCSV("goodland-money-records.csv",rows);
+}
+
+// Drawing boards
+function setupCanvas(who) {
+  const canvas = document.getElementById("canvas-" + who);
+  const ctx = canvas.getContext("2d");
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = 4;
+  let drawing = false;
+  function pos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return {x:(e.clientX-rect.left)*canvas.width/rect.width,y:(e.clientY-rect.top)*canvas.height/rect.height};
+  }
+  canvas.addEventListener("pointerdown",e => {
+    drawing = true;
+    canvas.setPointerCapture(e.pointerId);
+    const p = pos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x,p.y);
+    ctx.strokeStyle = document.getElementById("color-" + who).value;
+  });
+  canvas.addEventListener("pointermove",e => {
+    if (!drawing) return;
+    const p = pos(e);
+    ctx.lineTo(p.x,p.y);
+    ctx.stroke();
+  });
+  const stop = () => drawing = false;
+  canvas.addEventListener("pointerup",stop);
+  canvas.addEventListener("pointercancel",stop);
+  canvas.addEventListener("lostpointercapture",stop);
+}
+function clearCanvas(who) {
+  const canvas = document.getElementById("canvas-" + who);
+  canvas.getContext("2d").clearRect(0,0,canvas.width,canvas.height);
+}
+function saveDrawing(who) {
+  try {
+    if (storageSet("drawing_" + who,document.getElementById("canvas-" + who).toDataURL("image/png"))) notify("Drawing saved.");
+  } catch(e) { alert("Could not save drawing."); }
+}
+function loadDrawing(who) {
+  const data = storageGet("drawing_" + who,"");
+  clearCanvas(who);
+  if (!data) return;
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.getElementById("canvas-" + who);
+    canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+  };
+  img.src = data;
+}
+function clearDrawing(who) {
+  if (confirm("Clear this drawing board?")) {
+    clearCanvas(who);
+    notify("Drawing board cleared.");
+  }
+}
+
+// Market buyer records
+function addBuyer() {
+  const buyer = {
+    id:Date.now()+Math.random(),
+    name:document.getElementById("buyerName").value.trim(),
+    phone:document.getElementById("buyerPhone").value.trim(),
+    product:document.getElementById("buyerProduct").value.trim(),
+    notes:document.getElementById("buyerNotes").value.trim(),
+    date:new Date().toLocaleDateString()
+  };
+  if (!buyer.name || !buyer.phone) return alert("Enter buyer's name and phone.");
+  const buyers = storageGet("buyers",[]);
+  buyers.unshift(buyer);
+  if (storageSet("buyers",buyers)) {
+    ["buyerName","buyerPhone","buyerProduct","buyerNotes"].forEach(id => document.getElementById(id).value = "");
+    renderBuyers();
+    notify("Buyer saved.");
+  }
+}
+function renderBuyers() {
+  const box = document.getElementById("buyerList");
+  box.replaceChildren();
+  const search = (document.getElementById("buyerSearch").value || "").toLowerCase();
+  const buyers = storageGet("buyers",[]).filter(b => [b.name,b.phone,b.product,b.notes].join(" ").toLowerCase().includes(search));
+  if (!buyers.length) { box.textContent = "No matching buyer records."; return; }
+  buyers.forEach(b => {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    const name = document.createElement("strong");
+    name.textContent = b.name;
+    const details = document.createElement("p");
+    details.textContent = "Phone: " + b.phone + (b.product ? " | Product: " + b.product : "");
+    const notes = document.createElement("p");
+    notes.textContent = b.notes || "";
+    const date = document.createElement("small");
+    date.textContent = "Added: " + b.date;
+    const del = document.createElement("button");
+    del.className = "danger";
+    del.textContent = "Delete Buyer";
+    del.style.marginTop = "8px";
+    del.onclick = () => {
+      if (!confirm("Delete this buyer?")) return;
+      storageSet("buyers",storageGet("buyers",[]).filter(x => x.id !== b.id));
+      renderBuyers();
+    };
+    row.append(name,details,notes,date,document.createElement("br"),del);
+    box.appendChild(row);
+  });
+}
+function exportBuyers() {
+  const rows = [["Name","Phone","Product","Notes","Date"]];
+  storageGet("buyers",[]).forEach(b => rows.push([b.name,b.phone,b.product,b.notes,b.date]));
+  downloadCSV("goodland-buyers.csv",rows);
+}
+
+// Farm journal
+function addFarmLog() {
+  const title = document.getElementById("farmTitle").value.trim();
+  const details = document.getElementById("farmDetails").value.trim();
+  const date = document.getElementById("farmDate").value || new Date().toISOString().slice(0,10);
+  if (!title || !details) return alert("Enter an activity title and details.");
+  const logs = storageGet("farm_logs",[]);
+  logs.unshift({id:Date.now()+Math.random(),title,details,date});
+  if (storageSet("farm_logs",logs)) {
+    document.getElementById("farmTitle").value = "";
+    document.getElementById("farmDetails").value = "";
+    renderFarmLogs();
+    notify("Farm activity saved.");
+  }
+}
+function renderFarmLogs() {
+  const box = document.getElementById("farmList");
+  box.replaceChildren();
+  const logs = storageGet("farm_logs",[]);
+  if (!logs.length) { box.textContent = "No farm activities saved yet."; return; }
+  logs.forEach(log => {
+    const row = document.createElement("div");
+    row.className = "list-item";
+    const title = document.createElement("strong");
+    title.textContent = log.title + " — " + log.date;
+    const details = document.createElement("p");
+    details.textContent = log.details;
+    const del = document.createElement("button");
+    del.className = "danger";
+    del.textContent = "Delete";
+    del.onclick = () => {
+      if (!confirm("Delete this activity?")) return;
+      storageSet("farm_logs",storageGet("farm_logs",[]).filter(x => x.id !== log.id));
+      renderFarmLogs();
+    };
+    row.append(title,details,del);
+    box.appendChild(row);
+  });
+}
+
+// Calculator
+let calcExpression = "";
+function updateCalc() {
+  document.getElementById("calcDisplay").textContent = calcExpression || "0";
+}
+function calcInput(value) {
+  if (calcExpression.length > 80) return;
+  if (value === "%") {
+    const match = calcExpression.match(/(\d+\.?\d*)$/);
+    if (match) {
+      calcExpression = calcExpression.slice(0,-match[0].length) + "(" + match[0] + "/100)";
+    }
+  } else {
+    calcExpression += value;
+  }
+  updateCalc();
+}
+function calcClear() {
+  calcExpression = "";
+  updateCalc();
+}
+function calcDelete() {
+  calcExpression = calcExpression.slice(0,-1);
+  updateCalc();
+}
+function calcResult() {
+  if (!calcExpression) return;
+  // Accept only numbers, decimal points, parentheses and arithmetic operators.
+  if (!/^[0-9+\-*/().\s]+$/.test(calcExpression)) {
+    document.getElementById("calcDisplay").textContent = "Invalid expression";
+    calcExpression = "";
+    return;
+  }
+  try {
+    const result = Function('"use strict"; return (' + calcExpression + ')')();
+    if (typeof result !== "number" || !Number.isFinite(result)) throw new Error("Invalid");
+    calcExpression = String(Number(result.toPrecision(12)));
+    updateCalc();
+  } catch(e) {
+    document.getElementById("calcDisplay").textContent = "Math error";
+    calcExpression = "";
+  }
+}
+
+// Initial setup
+WORKSPACES.forEach(who => {
+  setupCanvas(who);
+  loadNotes(who);
+});
+document.getElementById("farmDate").value = new Date().toISOString().slice(0,10);
+</script>
+</body>
+</html>
